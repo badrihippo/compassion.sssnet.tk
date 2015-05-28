@@ -1,6 +1,6 @@
 # Databases
 *.sqlite
-
+*.sqlite[2,3]
 # Geany Project files
 *.geany
 
