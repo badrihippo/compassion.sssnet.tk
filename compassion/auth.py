@@ -3,7 +3,7 @@ from models import User
 from flask_login import LoginManager, login_user, logout_user, current_user
 import wtforms as wtf
 from flask_wtf import Form
-from flask import render_template, redirect, url_for, request
+from flask import render_template, redirect, url_for, request, flash
 
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -46,6 +46,7 @@ def login():
 	# Default to returning login page        
     return render_template('login.htm', form=form)
 
+@app.route('/logout')
 def logout():
     logout_user()
     flash('You are now logged out.')
