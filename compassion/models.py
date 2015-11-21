@@ -25,6 +25,10 @@ class ContactEmail(db.EmbeddedDocument):
     email = db.EmailField()
     extra_info = db.StringField()
 
+class ContactUnverifiedEmail(db.EmbeddedDocument):
+    email = db.EmailField()
+    verification_code = db.StringField()
+
 class User(db.Document, UserMixin):
     first_name = db.StringField(max_length=32)
     last_name = db.StringField(max_length=32)
@@ -37,6 +41,9 @@ class User(db.Document, UserMixin):
     addresses = db.ListField(db.EmbeddedDocumentField(ContactAddress))
     about_me = db.StringField()
     rescue_group = db.ReferenceField('RescueGroup')
+
+    # Unverified
+    unverified_emails = db.ListField(db.EmbeddedDocumentField(ContactUnverifiedEmail))
 
     def get_full_name(self):
         return '%s %s' % (self.first_name, self.last_name)
