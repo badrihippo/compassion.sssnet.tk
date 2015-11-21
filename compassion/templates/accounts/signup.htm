@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% import 'macros/forms.htm' as forms %}
+{% block title %}Sign up | Compassion{% endblock %}
+{% block content %}
+<form action="" method="POST">
+  {{ form.csrf_token }}
+
+  <div class="form-group">
+      <label for="{{form.first_name.html_name}}">Name</label>
+      {{ forms.field_errors(form.first_name) }}
+      {{ forms.field_errors(form.last_name) }}
+      {{ form.first_name(placeholder='First') }}
+      {{ form.last_name(placeholder='Last') }}
+  </div>
+
+  {{ forms.with_errors(form.gender) }}
+  {{ forms.with_errors(form.email) }}
+
+  {{ forms.with_errors(form.username) }}
+  {{ forms.with_errors(form.password) }}
+  {{ forms.with_errors(form.confirm_password) }}
+
+  {# Not yet done...
+  {{ forms.with_errors(form.phones) }}
+  {{ forms.with_errors(form.addresses) }}
+  {{ forms.with_errors(form.about_me) }}
+  {{ forms.with_errors(form.rescue_group) }}
+  ... #}
+
+  <input type="submit" class="btn btn-default" value="Sign up" />
+</form>
+{% endblock %}

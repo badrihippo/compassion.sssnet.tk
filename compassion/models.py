@@ -28,6 +28,7 @@ class ContactEmail(db.EmbeddedDocument):
 class ContactUnverifiedEmail(db.EmbeddedDocument):
     email = db.EmailField()
     verification_code = db.StringField()
+    allowed_letters = 'abcdefghjkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ023456789'
 
 class User(db.Document, UserMixin):
     first_name = db.StringField(max_length=32)
