@@ -78,7 +78,14 @@
       }
     
     }
-    
+
+    .toast {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      width: 300px;
+      z-index: 50000;
+    }
     </style>
   </head>
   <body>
@@ -117,6 +124,17 @@
         </div>
       </div>
     </div>
+
+    {# Flashed messages #}
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-info toast" role="alert">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>{{ message }}
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
 
     {% block main_body %}
     <div class="container container-main">
