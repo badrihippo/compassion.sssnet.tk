@@ -1,7 +1,7 @@
-from flask import render_template, flash, request, url_for, redirect
+from flask import render_template, flash, request, url_for, redirect, abort
 from app import app
 from auth import login_manager, current_user
-from models import User, GENDER_CHOICES, ContactUnverifiedEmail
+from models import User, Pet, GENDER_CHOICES, ContactUnverifiedEmail
 import wtforms as wtf
 from flask_wtf import Form
 import random
@@ -63,4 +63,5 @@ def user_profile(username):
     u = User.objects.get(username=username)
     if u is None:
         abort(404)
-    return render_template('accounts/user_profile.htm', user=u)
+    p = Pet.objects.filter(rescuer=u)
+    return render_template('accounts/user_profile.htm', user=u, pets=p)

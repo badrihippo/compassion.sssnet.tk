@@ -72,3 +72,4 @@ class Pet(db.Document):
     description = db.StringField()
     is_adopted = db.BooleanField(default=False)
     photos = db.ListField(db.ImageField(size=(800,600, True)))
+    rescuer = db.GenericReferenceField(choices=(User, RescueGroup))

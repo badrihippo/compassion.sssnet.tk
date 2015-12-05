@@ -4,4 +4,11 @@
 <h1>{{ user.first_name }} {{ user.last_name }}</h1>
 {% if user.avatar %}<img src="{{ user.avatar }}" class="profile-avatar" />{% endif %}
 <p>{{ user.about_me }}</p>
+
+<h2>Rescues</h2>
+<ul>
+  {% for pet in pets %}
+  <li><a href="{{ url_for('pet_profile', petid=pet.id) }}">{{ pet.name }}</a></li>
+  {% endfor %}
+</ul>
 {% endblock %}
