@@ -66,3 +66,11 @@ def user_profile(username):
         abort(404)
     p = Pet.objects.filter(rescuer=u)
     return render_template('accounts/user_profile.htm', user=u, pets=p)
+
+@app.route('/p/<petid>/')
+def pet_profile(petid):
+    try:
+        p = Pet.objects.get(id=petid)
+    except Pet.DoesNotExist:
+        abort(404)
+    return render_template('pets/pet_profile.htm', pet=p)
