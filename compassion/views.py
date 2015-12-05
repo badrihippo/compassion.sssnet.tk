@@ -60,8 +60,9 @@ def signup():
 
 @app.route('/u/<username>/')
 def user_profile(username):
-    u = User.objects.get(username=username)
-    if u is None:
+    try:
+        u = User.objects.get(username=username)
+    except User.DoesNotExist:
         abort(404)
     p = Pet.objects.filter(rescuer=u)
     return render_template('accounts/user_profile.htm', user=u, pets=p)
