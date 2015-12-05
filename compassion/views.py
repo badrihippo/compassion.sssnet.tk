@@ -57,3 +57,10 @@ def signup():
     else:
         return render_template('accounts/signup.htm', form=form)
     return redirect(url_for('index'))
+
+@app.route('/u/<username>/')
+def user_profile(username):
+    u = User.objects.get(username=username)
+    if u is None:
+        abort(404)
+    return render_template('accounts/user_profile.htm', user=u)
