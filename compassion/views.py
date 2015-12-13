@@ -75,6 +75,11 @@ def pet_profile(petid):
         abort(404)
     return render_template('pets/pet_profile.htm', pet=p)
 
+@app.route('/p/list')
+def pet_list():
+    pets = Pet.objects()
+    return render_template('pets/pet_list.htm', pets=pets)
+
 # TODO: Use model_form to make it DRY
 
 class NewPetForm(Form):

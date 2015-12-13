@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Find a Friend | Compassion{% endblock %}
+{% block content %}
+<h1>Find a Friend</h1>
+<ul>
+  {% for pet in pets %}
+  <li>
+    <ul>
+      <a href="{{ url_for('pet_profile', petid=pet.id) }}"><li>{{ pet.name }}</li></a>
+      <li>rescued by <a href="{{ url_for('user_profile', username=pet.rescuer.username) }}">{{ pet.rescuer.first_name }}</a></li>
+      <li>species: {{ pet.species.name }} ({{ pet.species.scientific_name }})</li>
+    </ul>
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}
