@@ -1,7 +1,7 @@
 from flask import render_template, flash, request, url_for, redirect, abort
 from app import app
 from auth import login_manager, current_user
-from models import User, Pet, GENDER_CHOICES, ContactUnverifiedEmail
+from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail
 import wtforms as wtf
 from flask_wtf import Form
 import random
@@ -74,3 +74,45 @@ def pet_profile(petid):
     except Pet.DoesNotExist:
         abort(404)
     return render_template('pets/pet_profile.htm', pet=p)
+
+# TODO: Use model_form to make it DRY
+
+class NewPetForm(Form):
+    rescue_time = wtf.DateTimeField(validators=[wtf.validators.required()])
+    name = wtf.StringField(validators=[wtf.validators.required()])
+    species = wtf.StringField(validators=[wtf.validators.required()])
+    gender = wtf.SelectField(choices=GENDER_CHOICES)
+    description = wtf.TextAreaField(validators=[wtf.validators.required()])
+    # TODO: photos
+
+@app.route('/a/rescue/add/', methods=['GET', 'POST'])
+def add_pet():
+    form = NewPetForm()
+    if request.method == 'POST' and form.validate():
+        try:
+            s = Species.objects.get(name=form.species.data)
+        except Species.DoesNotExist:
+            try:
+                s = Species.objects.get(scientific_name=form.species.data)
+            except Species.DoesNotExist:
+                s = Species(name=form.species.data)
+                s.save()
+
+        p = Pet()
+        p.rescuer = User.objects.get(username=current_user.username)
+        p.name = form.name.data
+        p.species = s
+        pgender = form.gender.data
+        prescue_time = form.rescue_time.data
+        p.description = form.description.data
+        # TODO: p.photos
+        p.save()
+
+        msg = '%(name)s was added successfully' % {
+            'name': p.name,
+            }
+
+        flash(msg)
+
+        return redirect(url_for('pet_profile', petid=p.id))
+    return render_template('pets/add_pet.htm', form=form)
