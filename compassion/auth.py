@@ -1,6 +1,6 @@
 from app import app, db
 from models import User
-from flask_login import LoginManager, login_user, logout_user, current_user
+from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 import wtforms as wtf
 from flask_wtf import Form
 from flask import render_template, redirect, url_for, request, flash

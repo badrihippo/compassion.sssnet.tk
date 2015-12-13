@@ -1,6 +1,6 @@
 from flask import render_template, flash, request, url_for, redirect, abort
 from app import app
-from auth import login_manager, current_user
+from auth import login_manager, current_user, login_required
 from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail
 import wtforms as wtf
 from flask_wtf import Form
@@ -86,6 +86,7 @@ class NewPetForm(Form):
     # TODO: photos
 
 @app.route('/a/rescue/add/', methods=['GET', 'POST'])
+@login_required
 def add_pet():
     form = NewPetForm()
     if request.method == 'POST' and form.validate():
