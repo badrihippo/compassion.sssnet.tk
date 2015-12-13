@@ -87,7 +87,7 @@ class NewPetForm(Form):
 
 @app.route('/a/rescue/add/', methods=['GET', 'POST'])
 @login_required
-def add_pet():
+def pet_add():
     form = NewPetForm()
     if request.method == 'POST' and form.validate():
         try:
