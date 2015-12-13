@@ -28,7 +28,7 @@ class SignupForm(Form):
         if field.data != form.confirm_password.data:
             raise wtf.ValidationError('Passwords do not match')
 
-@app.route('/accounts/signup', methods=['GET', 'POST'])
+@app.route('/accounts/signup/', methods=['GET', 'POST'])
 def signup():
     form = SignupForm()
     if request.method == 'POST' and form.validate():
