@@ -3,7 +3,7 @@ from app import app
 from auth import login_manager, current_user, login_required
 from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail
 import wtforms as wtf
-from flask_wtf import Form
+from flask_wtf import Form, RecaptchaField
 import random
 
 from flask_mongoengine.wtf import model_form
@@ -23,6 +23,8 @@ class SignupForm(Form):
             message=u'Username must be between 4 and 25 characters long')])
     password = wtf.PasswordField(validators=[wtf.validators.required()])
     confirm_password = wtf.PasswordField(validators=[wtf.validators.required()])
+
+    recaptcha = RecaptchaField()
 
     def validate_password(form, field):
         if field.data != form.confirm_password.data:
