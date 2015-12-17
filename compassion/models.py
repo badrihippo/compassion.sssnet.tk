@@ -8,6 +8,9 @@ GENDER_CHOICES = (
     ('?', 'Unknown')
     )
 
+class OneImage(db.EmbeddedDocument):
+    element = db.ImageField(size=(800, 600, True), thumbnail_size=(100, 100, True))
+
 class ContactPhone(db.EmbeddedDocument):
     title = db.StringField(max_length=32)
     country_code = db.StringField(max_length=4)
@@ -72,5 +75,5 @@ class Pet(db.Document):
     birthday = db.DateTimeField()
     description = db.StringField()
     is_adopted = db.BooleanField(default=False)
-    photos = db.ListField(db.ImageField(size=(800,600, True)))
+    photos = db.EmbeddedDocumentListField(OneImage)
     rescuer = db.GenericReferenceField(choices=(User, RescueGroup))
