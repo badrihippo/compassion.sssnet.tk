@@ -1,7 +1,7 @@
 from flask import render_template, flash, request, url_for, redirect, abort
 from app import app
 from auth import login_manager, current_user, login_required
-from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail
+from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, OneImage
 import wtforms as wtf
 from flask_wtf import Form, RecaptchaField
 import random
@@ -90,7 +90,7 @@ class NewPetForm(Form):
     species = wtf.StringField(validators=[wtf.validators.required()])
     gender = wtf.SelectField(choices=GENDER_CHOICES)
     description = wtf.TextAreaField(validators=[wtf.validators.required()])
-    # TODO: photos
+    photo = wtf.FileField(u'Image File')
 
 @app.route('/a/rescue/add/', methods=['GET', 'POST'])
 @login_required
@@ -114,6 +114,14 @@ def pet_add():
         prescue_time = form.rescue_time.data
         p.description = form.description.data
         # TODO: p.photos
+        #p.save()
+
+        # form.photo.data.save('uploads/' + filename)
+        if form.photo.data:
+            i = OneImage()
+            i.element.put(form.photo.data.stream)
+            p.photos.append(i)
+
         p.save()
 
         msg = '%(name)s was added successfully' % {

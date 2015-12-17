@@ -2,7 +2,7 @@
 {% import 'macros/forms.htm' as forms %}
 {% block title %}Add a Friend | Compassion{% endblock %}
 {% block content %}
-<form action="" method="POST">
+<form action="" method="POST" enctype="multipart/form-data">
   {{ form.csrf_token }}
 
   {{ forms.with_errors(form.rescue_time) }}
@@ -11,6 +11,8 @@
   {{ forms.with_errors(form.species) }}
   {{ forms.with_errors(form.gender) }}
   {{ forms.with_errors(form.description) }}
+
+  {{ forms.with_errors(form.photo) }}
 
   <input type="submit" class="btn btn-default" value="Add friend" />
 </form>
