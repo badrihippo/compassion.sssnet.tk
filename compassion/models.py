@@ -1,15 +1,21 @@
 from app import db
 from flask_login import UserMixin
 from flask_mongoengine.wtf import model_form
+import datetime
 
 GENDER_CHOICES = (
     ('M', 'Male'),
     ('F', 'Female'),
     ('?', 'Unknown')
     )
+class BinaryFile(db.Document):
+    filename = db.StringField(max_length=255, required=True)
+    created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+    payload = db.FileField(required=True)
+    meta = {'allow_inheritance': True}
 
-class OneImage(db.EmbeddedDocument):
-    element = db.ImageField(size=(800, 600, True), thumbnail_size=(100, 100, True))
+class ImageFile(BinaryFile):
+    payload = db.ImageField(size=(800, 600, True), thumbnail_size=(100, 100, True), required=True)
 
 class ContactPhone(db.EmbeddedDocument):
     title = db.StringField(max_length=32)
@@ -75,5 +81,5 @@ class Pet(db.Document):
     birthday = db.DateTimeField()
     description = db.StringField()
     is_adopted = db.BooleanField(default=False)
-    photos = db.EmbeddedDocumentListField(OneImage)
+    photos = db.ListField(db.ReferenceField(ImageFile))
     rescuer = db.GenericReferenceField(choices=(User, RescueGroup))
