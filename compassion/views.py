@@ -1,10 +1,14 @@
-from flask import render_template, flash, request, url_for, redirect, abort
+from flask import render_template, flash, request, url_for, redirect, abort, send_file
 from app import app
 from auth import login_manager, current_user, login_required
-from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, OneImage
+from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, ImageFile, db
 import wtforms as wtf
 from flask_wtf import Form, RecaptchaField
 import random
+
+# For GridFS
+from tempfile import NamedTemporaryFile
+from shutil import copyfileobj
 
 from flask_mongoengine.wtf import model_form
 
@@ -118,8 +122,10 @@ def pet_add():
 
         # form.photo.data.save('uploads/' + filename)
         if form.photo.data:
-            i = OneImage()
-            i.element.put(form.photo.data.stream)
+            i = ImageFile()
+            i.filename = secure_filename(form.photo.data.filename)
+            i.payload.put(form.photo.data.stream, content_type=form.photo.data.mimetype, filename=i.filename)
+            i.save()
             p.photos.append(i)
 
         p.save()
@@ -132,3 +138,14 @@ def pet_add():
 
         return redirect(url_for('pet_profile', petid=p.id))
     return render_template('pets/add_pet.htm', form=form)
+
+@app.route('/image/<string:file_id>')
+def show_image(file_id):
+    image = ImageFile.objects(id=file_id).first()
+    if image:
+        tempFileObj = NamedTemporaryFile(mode='w+b',suffix='jpg')
+        copyfileobj(image.payload,tempFileObj)
+        tempFileObj.seek(0,0)
+        return send_file(tempFileObj, mimetype='image')
+    else:
+        return "404" # might want to return something real here too

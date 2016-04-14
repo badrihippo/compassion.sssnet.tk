@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}{{ pet.name }} @ Compassion{% endblock %}
 {% block content %}
+{% if pet.photos -%}
+  {% for photo in pet.photos -%}
+    <img src="{{ url_for('show_image', file_id=photo.id) }}" />
+  {%- endfor %}
+{%- endif %}
 <h1>{{ pet.name }}</h1>
 <ul>
   <li>rescued by <a href="{{ url_for('user_profile', username=pet.rescuer.username) }}">{{ pet.rescuer.first_name }}</a></li>
