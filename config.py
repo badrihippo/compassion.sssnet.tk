@@ -15,7 +15,7 @@ class DevelopmentConfig(Config):
         print 'Detected OpenShift app. Loading parameters...'
         MONGODB_DB = os.environ.get('OPENSHIFT_APP_NAME')
         MONGODB_HOST = os.environ.get('OPENSHIFT_MONGODB_DB_HOST')
-        MONGODB_PORT = os.environ.get('OPENSHIFT_MONGODB_DB_PORT', 0)
+        MONGODB_PORT = int(os.environ.get('OPENSHIFT_MONGODB_DB_PORT', 0))
         MONGODB_USERNAME = os.environ.get('OPENSHIFT_MONGODB_DB_USERNAME')
         MONGODB_PASSWORD = os.environ.get('OPENSHIFT_MONGODB_DB_PASSWORD')
         
