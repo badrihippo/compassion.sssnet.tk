@@ -1,7 +1,7 @@
-from app import db
 from flask_login import UserMixin
 from flask_mongoengine.wtf import model_form
 import datetime
+from .app import db
 
 GENDER_CHOICES = (
     ('M', 'Male'),

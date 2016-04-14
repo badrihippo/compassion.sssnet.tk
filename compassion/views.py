@@ -1,10 +1,10 @@
 from flask import render_template, flash, request, url_for, redirect, abort, send_file
-from app import app
-from auth import login_manager, current_user, login_required
-from models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, ImageFile, db
 import wtforms as wtf
 from flask_wtf import Form, RecaptchaField
 import random
+from .app import app
+from .auth import login_manager, current_user, login_required
+from .models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, ImageFile, db
 
 # For GridFS
 from tempfile import NamedTemporaryFile
