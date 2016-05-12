@@ -1,10 +1,9 @@
 from flask import render_template, flash, request, url_for, redirect, abort, send_file
-import wtforms as wtf
-from flask_wtf import Form, RecaptchaField
 import random
 from .app import app
 from .auth import login_manager, current_user, login_required
-from .models import model_form, User, Pet, Species, GENDER_CHOICES, ContactUnverifiedEmail, ImageFile, db
+from .models import model_form, User, Pet, Species, ContactUnverifiedEmail, ImageFile, db
+from .forms import SignupForm, NewPetForm
 
 # For GridFS
 from tempfile import NamedTemporaryFile
@@ -15,24 +14,6 @@ from flask_mongoengine.wtf import model_form
 @app.route('/')
 def index():
     return render_template('index.htm')
-
-class SignupForm(Form):
-    first_name = wtf.StringField(validators=[wtf.validators.required()])
-    last_name = wtf.StringField(validators=[wtf.validators.required()])
-    gender = wtf.SelectField(choices=GENDER_CHOICES)
-    email = wtf.StringField(u'Email',
-        validators=[wtf.validators.required(), wtf.validators.email()])
-    username = wtf.StringField(validators=[wtf.validators.required(),
-        wtf.validators.Length(min=4, max=25,
-            message=u'Username must be between 4 and 25 characters long')])
-    password = wtf.PasswordField(validators=[wtf.validators.required()])
-    confirm_password = wtf.PasswordField(validators=[wtf.validators.required()])
-
-    recaptcha = RecaptchaField()
-
-    def validate_password(form, field):
-        if field.data != form.confirm_password.data:
-            raise wtf.ValidationError('Passwords do not match')
 
 @app.route('/accounts/signup/', methods=['GET', 'POST'])
 def signup():
@@ -85,16 +66,6 @@ def pet_profile(petid):
 def pet_list():
     pets = Pet.objects()
     return render_template('pets/pet_list.htm', pets=pets)
-
-# TODO: Use model_form to make it DRY
-
-class NewPetForm(Form):
-    rescue_time = wtf.DateTimeField(validators=[wtf.validators.required()])
-    name = wtf.StringField(validators=[wtf.validators.required()])
-    species = wtf.StringField(validators=[wtf.validators.required()])
-    gender = wtf.SelectField(choices=GENDER_CHOICES)
-    description = wtf.TextAreaField(validators=[wtf.validators.required()])
-    photo = wtf.FileField(u'Image File')
 
 @app.route('/a/rescue/add/', methods=['GET', 'POST'])
 @login_required
