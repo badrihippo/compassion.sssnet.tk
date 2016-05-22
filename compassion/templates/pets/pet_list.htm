@@ -5,6 +5,9 @@
 <ul>
   {% for pet in pets %}
   <li>
+    {% if pet.photos -%}
+      <img src="{{ url_for('show_image', file_id=pet.photos[0].id) }}"  class="img-responsive" style="max-width: 200px;"/>
+    {%- endif %}
     <ul>
       <a href="{{ url_for('pet_profile', petid=pet.id) }}"><li>{{ pet.name }}</li></a>
       <li>rescued by <a href="{{ url_for('user_profile', username=pet.rescuer.username) }}">{{ pet.rescuer.first_name }}</a></li>
