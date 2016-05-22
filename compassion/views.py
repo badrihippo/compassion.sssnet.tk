@@ -72,7 +72,7 @@ def pet_list():
 @app.route('/a/rescue/add/', methods=['GET', 'POST'])
 @login_required
 def pet_add():
-    form = NewPetForm()
+    form = NewPetForm(data={'rescue_time': datetime.now()})
     if request.method == 'POST' and form.validate():
         try:
             s = Species.objects.get(name=form.species.data)
