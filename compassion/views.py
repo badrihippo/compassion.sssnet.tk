@@ -121,4 +121,4 @@ def show_image(file_id):
         tempFileObj.seek(0,0)
         return send_file(tempFileObj, mimetype='image')
     else:
-        return "404" # might want to return something real here too
+        abort(404)
