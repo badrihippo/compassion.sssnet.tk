@@ -2,6 +2,15 @@ import wtforms as wtf
 from flask_wtf import Form, RecaptchaField
 from .models import GENDER_CHOICES
 
+class DateInput(wtf.widgets.TextInput):
+    def __init__(self, *args, **kwargs):
+        return super(DateInput, self).__init__()
+
+    def __call__(self, field, **kwargs):
+        kwargs['data-provide'] = u'datepicker'
+        kwargs['data-date-format'] = 'yyyy-mm-dd hh:ii:ss'
+        return super(DateInput, self).__call__(field, **kwargs)
+
 class SignupForm(Form):
     first_name = wtf.StringField(validators=[wtf.validators.required()])
     last_name = wtf.StringField(validators=[wtf.validators.required()])
@@ -23,7 +32,7 @@ class SignupForm(Form):
 # TODO: Use model_form to make it DRY
 
 class NewPetForm(Form):
-    rescue_time = wtf.DateTimeField(validators=[wtf.validators.required()])
+    rescue_time = wtf.DateTimeField(validators=[wtf.validators.required()], widget=DateInput())
     name = wtf.StringField(validators=[wtf.validators.required()])
     species = wtf.StringField(validators=[wtf.validators.required()])
     gender = wtf.SelectField(choices=GENDER_CHOICES)
