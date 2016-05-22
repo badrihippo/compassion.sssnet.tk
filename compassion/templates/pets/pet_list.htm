@@ -2,17 +2,25 @@
 {% block title %}Find a Friend | Compassion{% endblock %}
 {% block content %}
 <h1>Find a Friend</h1>
-<ul>
+<ul class="media">
   {% for pet in pets %}
-  <li>
+  <li class="media-object">
     {% if pet.photos -%}
-      <img src="{{ url_for('show_image', file_id=pet.photos[0].id) }}"  class="img-responsive" style="max-width: 200px;"/>
+    <div class="media-left">
+      <a href="{{ url_for('pet_profile', petid=pet.id) }}">
+        <img src="{{ url_for('show_image', file_id=pet.photos[0].id) }}"  class="img-responsive" style="max-height: 8em;"/>
+      </a>
+    </div>
     {%- endif %}
-    <ul>
-      <a href="{{ url_for('pet_profile', petid=pet.id) }}"><li>{{ pet.name }}</li></a>
-      <li>rescued by <a href="{{ url_for('user_profile', username=pet.rescuer.username) }}">{{ pet.rescuer.first_name }}</a></li>
-      <li>species: {{ pet.species.name }} ({{ pet.species.scientific_name }})</li>
-    </ul>
+    <div class="media-body">
+        <h4 class="media-heading">
+          <a href="{{ url_for('pet_profile', petid=pet.id) }}">{{ pet.name }}</a>
+        </h4>
+      <dl>
+        <dt>rescued by</dt><dd><a href="{{ url_for('user_profile', username=pet.rescuer.username) }}">{{ pet.rescuer.first_name }}</a></dd>
+        <dt>species</dt><dd>{{ pet.species.name }} ({{ pet.species.scientific_name }})</dd>
+      </dl>
+    </div>
   </li>
   {% endfor %}
 </ul>
