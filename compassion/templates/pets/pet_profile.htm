@@ -3,7 +3,7 @@
 {% block content %}
 {% if pet.photos -%}
   {% for photo in pet.photos -%}
-    <img src="{{ url_for('show_image', file_id=photo.id) }}" />
+    <img src="{{ url_for('show_image', file_id=photo.id) }}" class="img-responsive"/>
   {%- endfor %}
 {%- endif %}
 <h1>{{ pet.name }}</h1>
